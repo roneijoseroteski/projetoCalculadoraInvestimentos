@@ -1,3 +1,11 @@
 @import "tailwindcss";
 @source "./index.html";
 @source "./src/**/*.{js,ts,jsx,tsx,html}";
+
+@layer utilities {
+  .error {
+    @apply border-2;
+    @apply border-red-600;
+    @apply rounded-lg;
+  }
+}

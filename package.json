@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.2",
+    "chart.js": "^4.5.1",
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.2"
   }

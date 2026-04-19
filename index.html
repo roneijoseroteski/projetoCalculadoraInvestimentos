@@ -9,7 +9,7 @@
   </head>
   <body class="h-[100dvh] grid grid-cols-3 grid-rows-2">
     <aside
-      class="row-span-2 bg-emerald-300 flex flex-col justify-between py-5 px-2"
+      class="h-full row-span-2 bg-emerald-300 flex flex-col justify-between py-5 px-2"
     >
       <h1 class="text-2xl font-bold px-6">Calculadoura de Investimentos</h1>
 
@@ -149,15 +149,15 @@
       </div>
     </aside>
 
-    <main class="h-full">
+    <main class="row-span-2 col-span-2">
       <!-- <p>Resultados</p> -->
-      <section id="charts-container">
-        <div class="h-[36dvh]">
-          <p>Resultado Final</p>
+      <section id="charts-container" class="h-full">
+        <div class="h-[36%] flex flex-col items-center pb-10">
+          <p class="font-bold text-lg">Resultado Final</p>
           <canvas id="final-money-distribution"></canvas>
         </div>
-        <div class="h-[56dvh]">
-          <p>Progressão</p>
+        <div class="h-[56%] flex flex-col items-center">
+          <p class="font-bold text-lg">Progressão</p>
           <canvas id="progression"></canvas>
         </div>
       </section>

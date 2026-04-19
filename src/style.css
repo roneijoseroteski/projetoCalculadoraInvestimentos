@@ -9,3 +9,6 @@
     @apply rounded-lg;
   }
 }
+body {
+  box-sizing: border-box;
+}

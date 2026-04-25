@@ -19,22 +19,22 @@ const columnArray = [
   {
     columnLabel: "Total Investido",
     accessor: "investedAmount",
-    format: (numberInfo) => formatCurrency(numberInfo),
+    format: (numberInfo) => formatCurrencyToTable(numberInfo),
   },
   {
     columnLabel: "Rendimento Mensal",
     accessor: "interestReturns",
-    format: (numberInfo) => formatCurrency(numberInfo),
+    format: (numberInfo) => formatCurrencyToTable(numberInfo),
   },
   {
     columnLabel: "Rendimento Total",
     accessor: "totalInterestReturns",
-    format: (numberInfo) => formatCurrency(numberInfo),
+    format: (numberInfo) => formatCurrencyToTable(numberInfo),
   },
   {
     columnLabel: "Quantia Total",
     accessor: "totalAmount",
-    format: (numberInfo) => formatCurrency(numberInfo),
+    format: (numberInfo) => formatCurrencyToTable(numberInfo),
   },
 ];
 
@@ -45,7 +45,11 @@ const columnArray = [
 //   });
 // }
 
-function formatCurrency(value) {
+function formatCurrencyToGraph(value) {
+  return value.toFixed(2); // aqui garantimos que o valor seja exibido com duas casas decimais, como é comum em tabelas financeiras. O método toFixed() converte um número em uma string, arredondando para um número específico de casas decimais. No caso, estamos usando 2 para garantir que os valores sejam exibidos com duas casas decimais, mesmo que sejam números inteiros.
+}
+
+function formatCurrencyToTable(value) {
   return value.toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
@@ -96,62 +100,62 @@ function renderProgression(evt) {
 
   const finalInvestmentObject = returnsArray[returnsArray.length - 1];
 
-  // doughnutChartReference = new Chart(finalMoneyChart, {
-  //   type: "doughnut",
-  //   data: {
-  //     labels: ["Total investido", "Rendimento", "Imposto"],
-  //     datasets: [
-  //       {
-  //         data: [
-  //           formatCurrency(finalInvestmentObject.investedAmount),
-  //           formatCurrency(
-  //             finalInvestmentObject.totalInterestReturns * (1 - taxRate / 100),
-  //           ),
-  //           formatCurrency(
-  //             finalInvestmentObject.totalInterestReturns * (taxRate / 100),
-  //           ),
-  //         ],
-  //         backgroundColor: [
-  //           "rgb(255, 99, 132)",
-  //           "rgb(54, 162, 235)",
-  //           "rgb(255, 205, 86)",
-  //         ],
-  //         hoverOffset: 4,
-  //       },
-  //     ],
-  //   },
-  // });
+  doughnutChartReference = new Chart(finalMoneyChart, {
+    type: "doughnut",
+    data: {
+      labels: ["Total investido", "Rendimento", "Imposto"],
+      datasets: [
+        {
+          data: [
+            formatCurrencyToGraph(finalInvestmentObject.investedAmount),
+            formatCurrencyToGraph(
+              finalInvestmentObject.totalInterestReturns * (1 - taxRate / 100),
+            ),
+            formatCurrencyToGraph(
+              finalInvestmentObject.totalInterestReturns * (taxRate / 100),
+            ),
+          ],
+          backgroundColor: [
+            "rgb(255, 99, 132)",
+            "rgb(54, 162, 235)",
+            "rgb(255, 205, 86)",
+          ],
+          hoverOffset: 4,
+        },
+      ],
+    },
+  });
 
-  // progressionChartReference = new Chart(progressionChart, {
-  //   type: "bar",
-  //   data: {
-  //     labels: returnsArray.map((investmentObject) => investmentObject.month),
-  //     datasets: [
-  //       {
-  //         label: "Total Investido",
-  //         data: returnsArray.map((investmentObject) =>
-  //           formatCurrency(investmentObject.investedAmount),
-  //         ),
+  progressionChartReference = new Chart(progressionChart, {
+    type: "bar",
+    data: {
+      labels: returnsArray.map((investmentObject) => investmentObject.month),
+      datasets: [
+        {
+          label: "Total Investido",
+          data: returnsArray.map((investmentObject) =>
+            formatCurrencyToGraph(investmentObject.investedAmount),
+          ),
 
-  //         backgroundColor: "rgb(255, 99, 132)",
-  //       },
-  //       {
-  //         label: "Retorno do Investimento",
-  //         data: returnsArray.map((investmentObject) =>
-  //           formatCurrency(investmentObject.interestReturns),
-  //         ),
-  //         backgroundColor: "rgb(54, 162, 235)",
-  //       },
-  //     ],
-  //   },
-  //   options: {
-  //     responsive: true,
-  //     scales: {
-  //       x: { stacked: true },
-  //       y: { stacked: true },
-  //     },
-  //   },
-  // });
+          backgroundColor: "rgb(255, 99, 132)",
+        },
+        {
+          label: "Retorno do Investimento",
+          data: returnsArray.map((investmentObject) =>
+            formatCurrencyToGraph(investmentObject.interestReturns),
+          ),
+          backgroundColor: "rgb(54, 162, 235)",
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { stacked: true },
+        y: { stacked: true },
+      },
+    },
+  });
 
   createTable(columnArray, returnsArray, "results-table");
 }
@@ -232,6 +236,26 @@ for (const formElement of form) {
     formElement.addEventListener("blur", validateInput);
   }
 }
+
+const mainEL = document.querySelector("main");
+const carouselEL = document.getElementById("carousel");
+const nextButton = document.getElementById("slide-arrow-next");
+const previousButton = document.getElementById("slide-arrow-previous");
+
+nextButton.addEventListener("click", () => {
+  carouselEL.scrollLeft += mainEL.clientWidth; //clientWidth = entrega a largura de um elemento, incluindo o preenchimento, mas não a borda, a barra de rolagem ou a margem. Ao usar scrollLeft, estamos ajustando a posição de rolagem horizontal do elemento carouselEL, aumentando-a em um valor igual à largura do elemento mainEL. Isso faz com que o conteúdo dentro do carousel se mova para a esquerda, revelando o próximo conjunto de itens no carrossel.
+});
+
+previousButton.addEventListener("click", () => {
+  carouselEL.scrollLeft -= mainEL.clientWidth; // aqui fazemos o oposto, diminuindo a posição de rolagem horizontal do elemento carouselEL em um valor igual à largura do elemento mainEL. Isso faz com que o conteúdo dentro do carousel se mova para a direita, revelando o conjunto anterior de itens no carrossel.
+});
+
+// nextButton.addEventListener("click", () => {
+//   carouselEL.scrollTo({
+//     left: carouselEL.clientWidth,
+//     behavior: "smooth",
+//   });
+// }); ia generate
 
 form.addEventListener("submit", renderProgression);
 
